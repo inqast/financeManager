@@ -5,19 +5,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import domain.Operation.OperationType;
 import domain.exception.InvalidBudgetException;
 
 public class Budget {
-    private Map<Integer, Category> categories;
+    private Map<Integer, Category> incomeCategories;
+    private Map<Integer, Category> outcomeCategories;
     private Map<Integer, List<Operation>> incomes;
     private Map<Integer, List<Operation>> outcomes;
 
     public Budget(List<Operation> operationsList, List<Category> categoriesList) {
 
-        categories = new HashMap<>();
+        incomeCategories = new HashMap<>();
+        outcomeCategories = new HashMap<>();
+
         for (Category category : categoriesList) {
-            categories.put(category.getID(), category);
+            if (category.getType() == OperationType.INCOME) {
+                incomeCategories.put(category.getID(), category);
+            } else if (category.getType() == OperationType.OUTCOME) {
+                outcomeCategories.put(category.getID(), category);
+            }
         }
 
         incomes = new HashMap<>();
@@ -55,10 +61,13 @@ public class Budget {
     public Map<String, Integer> getIncomeByCategory() {
         Map<String, Integer> result = new HashMap<>();
 
-        for (var entry : categories.entrySet()) {
+        for (var entry : incomeCategories.entrySet()) {
             int total = 0;
-            for (Operation operation : incomes.get(entry.getKey())) {
-                total += operation.getAmount();
+
+            if (incomes.get(entry.getKey()) != null) {
+                for (Operation operation : incomes.get(entry.getKey())) {
+                    total += operation.getAmount();
+                }
             }
 
             result.put(entry.getValue().getName(), total);
@@ -82,14 +91,15 @@ public class Budget {
     public List<Position> getOutcomeByCategory() {
         List<Position> result = new ArrayList<>();
 
-        for (var entry : categories.entrySet()) {
+        for (var entry : outcomeCategories.entrySet()) {
             Category category = entry.getValue();
 
             Position position = new Position(category.getName(), category.getAmount());
 
-
-            for (Operation operation : incomes.get(entry.getKey())) {
-                position.append(operation.getAmount());
+            if (outcomes.get(entry.getKey()) != null) {
+                for (Operation operation : outcomes.get(entry.getKey())) {
+                    position.append(operation.getAmount());
+                }
             }
 
             result.add(position);
@@ -103,18 +113,22 @@ public class Budget {
             throw new InvalidBudgetException("Расходы превысили доходы!");
         }
 
-        for (var entry : categories.entrySet()) {
+        for (var entry : outcomeCategories.entrySet()) {
             Category category = entry.getValue();
 
-            if (category.getAmount() > 0 && getOutcomeByCategory(getOutcomeByCategory(category.getID())) > category.getAmount()) {
+            if (category.getAmount() > 0 && getOutcomeByCategoryID(category.getID()) > category.getAmount()) {
                 throw new InvalidBudgetException("Расходы превысили доходы в категории " + category.getName());
             }
         }  
     }
 
-    public int getOutcomeByCategory(int categoryId) {
+    public int getOutcomeByCategoryID(int categoryId) {
         int total = 0;
         
+        if (outcomes.get(categoryId) == null) {
+            return total;
+        }
+
         for (Operation operation : outcomes.get(categoryId)) {
             total += operation.getAmount();
         }
@@ -126,15 +140,19 @@ public class Budget {
         private String category;
         private int amount;
         private int remaining;
+        private boolean isLimited;
 
         public Position(String category, int remaining) {
             this.category = category;
             this.remaining = remaining;
+            this.isLimited = remaining != 0;
         }
 
         public void append(int amount) {
             this.amount += amount;
-            this.remaining -= amount;
+            if (isLimited) {
+                this.remaining -= amount;
+            }
         }
 
         public String getCategory() {

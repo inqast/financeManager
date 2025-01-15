@@ -44,7 +44,7 @@ public class Main {
 
             server = HttpServer.create(new InetSocketAddress(8000), 0);
 
-            server.createContext("/operation", new OperationHandler(service));
+            server.createContext("/operations", new OperationHandler(service));
             server.createContext("/category", new CategoryHandler(service));
             server.createContext("/user", new UserHandler(service));
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domain.Operation;
-import domain.Operation.OperationType;
+import domain.OperationType;
 import domain.exception.DuplicateException;
 import domain.exception.InvalidArgumentException;
 import domain.exception.NotFoundException;
@@ -70,7 +70,7 @@ public class Repo implements OperationRepo {
         }
     }
 
-    private String getStringFromType(Operation.OperationType type) throws InvalidArgumentException {
+    private String getStringFromType(OperationType type) throws InvalidArgumentException {
         switch (type) {
             case INCOME:
                 return "income";
@@ -81,7 +81,7 @@ public class Repo implements OperationRepo {
         }
     }
 
-    private Operation.OperationType getTypeFromString(String type) throws InvalidArgumentException {
+    private OperationType getTypeFromString(String type) throws InvalidArgumentException {
         switch (type) {
             case "income":
                 return OperationType.INCOME;

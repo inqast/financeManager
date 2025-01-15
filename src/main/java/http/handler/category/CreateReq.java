@@ -2,12 +2,14 @@ package http.handler.category;
 
 import org.json.JSONObject;
 
+import domain.OperationType;
 import domain.exception.InvalidRequestException;
 import http.request.Request;
 
 public class CreateReq extends Request {
     private int limit;
     private String name;
+    private OperationType type;
     private String token;
 
 
@@ -22,6 +24,7 @@ public class CreateReq extends Request {
 
         this.limit = parseInt(obj, "limit");
         this.name = parseString(obj, "name");
+        this.type = getTypeFromString(parseString(obj, "type"));
         this.token = token;
     }
 
@@ -57,5 +60,21 @@ public class CreateReq extends Request {
 
     public String getToken() {
         return token;
+    }
+
+    public OperationType getType() {
+        return type;
+    }
+
+
+    private OperationType getTypeFromString(String type) throws InvalidRequestException {
+        switch (type) {
+            case "income":
+                return OperationType.INCOME;
+            case "outcome":
+                return OperationType.OUTCOME;
+            default:
+                throw new InvalidRequestException("Неверный тип операции");
+        }
     }
 }

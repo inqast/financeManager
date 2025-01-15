@@ -27,7 +27,9 @@ public class Repo implements service.UserRepo {
             }
 
             ResultSet resultSet = statement.getResultSet();
-            resultSet.next();
+            if (!resultSet.next()) {
+                throw new NotFoundException("Пользователь не найден!");
+            }            
         
             return new User(
                 resultSet.getInt(Keys.ID),
@@ -50,7 +52,9 @@ public class Repo implements service.UserRepo {
             }
 
             ResultSet resultSet = statement.getResultSet();
-            resultSet.next();
+            if (!resultSet.next()) {
+                throw new NotFoundException("Пользователь не найден!");
+            }
         
             return new User(
                 resultSet.getInt(Keys.ID),

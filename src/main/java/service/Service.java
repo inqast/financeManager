@@ -6,9 +6,10 @@ import java.util.List;
 import domain.Budget;
 import domain.Category;
 import domain.Operation;
-import domain.Operation.OperationType;
+import domain.OperationType;
 import domain.User;
 import domain.exception.AccessException;
+import domain.exception.InvalidArgumentException;
 import domain.exception.NotFoundException;
 
 public class Service implements IService {
@@ -50,10 +51,10 @@ public class Service implements IService {
     }
 
     @Override
-    public void addCategory(int limit, String name, String token) throws Exception {
+    public void addCategory(int limit, String name, OperationType type, String token) throws Exception {
         User user = userRepo.getByToken(token);
 
-        Category category = new Category(limit, name, limit, user.getID());
+        Category category = new Category(type, name, limit, user.getID());
 
         categoryRepo.create(category);
     }
@@ -65,6 +66,9 @@ public class Service implements IService {
         List<Operation> operations = operationRepo.getListForUser(user.getID());
 
         Category category = categoryRepo.getForUserByName(categoryName, user.getID());
+        if (category.getType() != OperationType.INCOME) {
+            throw new InvalidArgumentException("Неверная категория!");
+        }
         
         Operation operation = new Operation(amount, OperationType.INCOME, category.getID(), amount, user.getID());
 
@@ -81,6 +85,9 @@ public class Service implements IService {
         List<Operation> operations = operationRepo.getListForUser(user.getID());
 
         Category category = categoryRepo.getForUserByName(categoryName, user.getID());
+        if (category.getType() != OperationType.OUTCOME) {
+            throw new InvalidArgumentException("Неверная категория!");
+        }
 
         Operation operation = new Operation(amount, OperationType.OUTCOME, category.getID(), amount, user.getID());
 

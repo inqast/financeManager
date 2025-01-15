@@ -27,7 +27,7 @@ public class CategoryHandler extends Handler {
         CreateReq req = new CreateReq(readBody(t), getAuthHeader(t));
         req.validate();
 
-        service.addCategory(req.getLimit(), req.getName(), req.getToken());
+        service.addCategory(req.getLimit(), req.getName(), req.getType(), req.getToken());
 
         return "";
     }

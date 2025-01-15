@@ -1,11 +1,6 @@
 package domain;
 
 public class Operation {
-    public enum OperationType {
-        UNKNOWN,
-        INCOME,
-        OUTCOME
-    }
 
     private int id;
     private OperationType type;

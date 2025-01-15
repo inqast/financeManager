@@ -36,7 +36,7 @@ public class User {
     }
 
     public String getToken() {
-        if (!actualToken.isEmpty()) {
+        if (actualToken == null || actualToken.isEmpty()) {
             setToken();
         }
 
