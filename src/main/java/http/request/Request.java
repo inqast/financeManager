@@ -1,11 +1,9 @@
 package http.request;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.UUID;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import domain.exception.InvalidRequestException;
 
 public abstract class Request {
     public abstract void validate() throws InvalidRequestException;
@@ -34,38 +32,6 @@ public abstract class Request {
             return 0;
         } catch (Exception e) {
             throw new InvalidRequestException("wrong int format");
-        }
-    }
-
-    protected UUID parseUUID(JSONObject obj, String key) throws InvalidRequestException {
-        try {
-            String s = obj.getString(key);
-            
-            return UUID.fromString(s);
-        } catch (JSONException e) {
-            return UUID.randomUUID();
-        } catch (Exception e) {
-            throw new InvalidRequestException("wrong UUID format");
-        }
-    }
-
-    protected UUID parseUUID(String value) throws InvalidRequestException {
-        try {            
-            return UUID.fromString(value);
-        } catch (Exception e) {
-            throw new InvalidRequestException("wrong UUID format");
-        }
-    }
-
-    protected Date parseDate(JSONObject obj, String key) throws InvalidRequestException {
-        try {
-            String s = obj.getString(key);
-            
-            return DateFormat.getDateInstance(DateFormat.SHORT).parse(s);
-        } catch (JSONException e) {
-            return null;
-        } catch (Exception e) {
-            throw new InvalidRequestException("wrong date format, dd/mm/yy expected");
         }
     }
 }

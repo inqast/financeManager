@@ -46,6 +46,10 @@ public abstract class Handler implements HttpHandler {
         return "";
     }
 
+    protected String getAuthHeader(HttpExchange t) {
+        return t.getRequestHeaders().getFirst("Auth");
+    }
+
     protected static void processOK(HttpExchange t, String responseString)  throws IOException {
         byte[] response = responseString.getBytes(StandardCharsets.UTF_8);
 

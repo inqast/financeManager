@@ -73,16 +73,6 @@ public class Repo implements CategoryRepo {
     }
 
     @Override
-    public Category getCommonCategory(int userID) throws Exception {
-        return new Category(
-            0,
-            "Вне категорий",
-            0,
-            userID
-        );
-    }
-
-    @Override
     public void create(Category category) throws Exception {
         String query = "INSERT INTO categories (name, limit, owner) " + 
         "VALUES (?, ?, ?)";

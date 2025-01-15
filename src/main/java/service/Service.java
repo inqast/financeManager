@@ -17,7 +17,12 @@ public class Service implements IService {
     private OperationRepo operationRepo;
     private CategoryRepo categoryRepo;
 
-    public Service() {}
+    public Service(MessageDigest md, UserRepo userRepo, OperationRepo operationRepo, CategoryRepo categoryRepo) {
+        this.md = md;
+        this.userRepo = userRepo;
+        this.operationRepo = operationRepo;
+        this.categoryRepo = categoryRepo;
+    }
 
     @Override
     public String signUp(String login, String password) throws Exception {
@@ -59,13 +64,8 @@ public class Service implements IService {
         List<Category> categories = categoryRepo.getListForUser(user.getID());
         List<Operation> operations = operationRepo.getListForUser(user.getID());
 
-        Category category;
-        try {
-            category = categoryRepo.getForUserByName(categoryName, user.getID());
-        } catch (NotFoundException e) {
-            category = categoryRepo.getCommonCategory(user.getID());
-        }
-
+        Category category = categoryRepo.getForUserByName(categoryName, user.getID());
+        
         Operation operation = new Operation(amount, OperationType.INCOME, category.getID(), amount, user.getID());
 
         operationRepo.create(operation);
@@ -80,12 +80,7 @@ public class Service implements IService {
         List<Category> categories = categoryRepo.getListForUser(user.getID());
         List<Operation> operations = operationRepo.getListForUser(user.getID());
 
-        Category category;
-        try {
-            category = categoryRepo.getForUserByName(categoryName, user.getID());
-        } catch (NotFoundException e) {
-            category = categoryRepo.getCommonCategory(user.getID());
-        }
+        Category category = categoryRepo.getForUserByName(categoryName, user.getID());
 
         Operation operation = new Operation(amount, OperationType.OUTCOME, category.getID(), amount, user.getID());
 
