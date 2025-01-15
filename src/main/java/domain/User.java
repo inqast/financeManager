@@ -12,6 +12,10 @@ public class User {
     private String passwordHash;
     private String actualToken;
 
+    public User(String login) {
+        this.login = login;
+    }
+
     public User(int id, String login, String passwordHash, String actualToken) {
         this.id = id;
         this.login = login;
@@ -27,6 +31,16 @@ public class User {
         return this.login;
     }
 
+    public String signUp(MessageDigest md, String password) throws AccessException {
+        byte[] hash = md.digest(password.getBytes());
+
+        String encodedHash = Base64.getEncoder().encodeToString(hash);
+        
+        passwordHash = encodedHash;
+
+        return getToken();
+    }
+
     public String login(MessageDigest md, String password) throws AccessException {
         byte[] hash = md.digest(password.getBytes());
 
@@ -40,12 +54,16 @@ public class User {
 
     private String getToken() {
         if (!actualToken.isEmpty()) {
-            return actualToken;
+            setToken();
         }
 
+        return actualToken;
+    }
+
+    private void setToken() {
         String keySource = this.login + this.id + new Date().getTime();
         byte [] tokenByte =  Base64.getEncoder().encode(keySource.getBytes());
 
-        return new String(tokenByte);
+        actualToken = new String(tokenByte);
     }
 }

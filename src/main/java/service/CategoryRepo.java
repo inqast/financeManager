@@ -6,5 +6,7 @@ import domain.Category;
 
 public interface CategoryRepo {
     public List<Category> getListForUser(int userID) throws Exception;
+    public Category getForUserByName(String name, int userID) throws Exception;
+    public Category getCommonCategory() throws Exception;
     public void create(Category category) throws Exception;
 }

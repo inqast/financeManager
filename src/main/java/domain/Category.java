@@ -6,6 +6,12 @@ public class Category {
     private int amount;
     private int userId;
 
+    public Category(String name, int amount, int userId) {
+        this.name = name;
+        this.amount = amount;
+        this.userId = userId;
+    }
+
     public Category(int id, String name, int amount, int userId) {
         this.id = id;
         this.name = name;

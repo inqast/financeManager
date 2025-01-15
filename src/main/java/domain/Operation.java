@@ -13,6 +13,13 @@ public class Operation {
     private int amount;
     private int userId;
 
+    public Operation(OperationType type, int categoryId, int amount, int userId) {
+        this.type = type;
+        this.categoryId = categoryId;
+        this.amount = amount;
+        this.userId = userId;
+    }
+
     public Operation(int id, OperationType type, int categoryId, int amount, int userId) {
         this.id = id;
         this.type = type;
