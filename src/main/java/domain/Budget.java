@@ -106,7 +106,7 @@ public class Budget {
         for (var entry : categories.entrySet()) {
             Category category = entry.getValue();
 
-            if (getOutcomeByCategory(getOutcomeByCategory(category.getID())) > category.getAmount()) {
+            if (category.getAmount() > 0 && getOutcomeByCategory(getOutcomeByCategory(category.getID())) > category.getAmount()) {
                 throw new InvalidBudgetException("Расходы превысили доходы в категории " + category.getName());
             }
         }  

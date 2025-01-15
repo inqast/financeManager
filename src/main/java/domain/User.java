@@ -31,6 +31,18 @@ public class User {
         return this.login;
     }
 
+    public String getPasswordHash() {
+        return this.passwordHash;
+    }
+
+    public String getToken() {
+        if (!actualToken.isEmpty()) {
+            setToken();
+        }
+
+        return actualToken;
+    }
+
     public String signUp(MessageDigest md, String password) throws AccessException {
         byte[] hash = md.digest(password.getBytes());
 
@@ -50,14 +62,6 @@ public class User {
         } else {
             throw new AccessException("invalid credentials!");
         }
-    }
-
-    private String getToken() {
-        if (!actualToken.isEmpty()) {
-            setToken();
-        }
-
-        return actualToken;
     }
 
     private void setToken() {

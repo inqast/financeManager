@@ -63,7 +63,7 @@ public class Service implements IService {
         try {
             category = categoryRepo.getForUserByName(categoryName, user.getID());
         } catch (NotFoundException e) {
-            category = categoryRepo.getCommonCategory();
+            category = categoryRepo.getCommonCategory(user.getID());
         }
 
         Operation operation = new Operation(amount, OperationType.INCOME, category.getID(), amount, user.getID());
@@ -84,7 +84,7 @@ public class Service implements IService {
         try {
             category = categoryRepo.getForUserByName(categoryName, user.getID());
         } catch (NotFoundException e) {
-            category = categoryRepo.getCommonCategory();
+            category = categoryRepo.getCommonCategory(user.getID());
         }
 
         Operation operation = new Operation(amount, OperationType.OUTCOME, category.getID(), amount, user.getID());
