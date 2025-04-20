@@ -13,7 +13,8 @@
 - make migrate
 
 ## Создание пользователя
-POST /user/signup 
+POST /user/signup
+
 body:
  - login string
  - password string
@@ -30,6 +31,7 @@ curl --location 'localhost:8080/user/signup' \
 
 ## Получение токена для пользователя
 POST /user/login 
+
 body:
  - login string
  - password string
@@ -46,8 +48,10 @@ curl --location 'localhost:8080/user/login' \
 
 ## Создание категории
 POST /category 
+
 headers:
 - Auth string токен пользователя
+
 body:
  - name string
  - limit string
@@ -67,8 +71,10 @@ curl --location 'localhost:8080/category' \
 
 ## Добавление дохода
 POST /operations/income 
+
 headers:
 - Auth string токен пользователя
+
 body:
  - category string
  - amount string
@@ -86,8 +92,10 @@ curl --location 'localhost:8080/operations/income' \
 
 ## Добавление расхода
 POST /operations/outcome 
+
 headers:
 - Auth string токен пользователя
+
 body:
  - category string
  - amount string
@@ -105,6 +113,7 @@ curl --location 'localhost:8080/operations/8' \
 
 ## Получение бюджета
 get /operations 
+
 headers:
 - Auth string токен пользователя
 
